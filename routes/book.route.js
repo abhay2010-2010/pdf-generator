@@ -8,7 +8,7 @@ const bookRoute = express.Router();
 // bookRoute.get("/",()=>{
 //     console.log("hello");
 // });
-bookRoute.get("/", auth, access("admin,user"), getbook);
+bookRoute.get("/", auth,access("user"), getbook);
 
 bookRoute.post("/add", auth, access("user"), addbook);
 
