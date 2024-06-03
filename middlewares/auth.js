@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
 const { userModel } = require("../model/usermodel")
 const { blacklistModel } = require("../model/blacklistmodel")
+const Users = require("../schema/user.schema")
 
 
 const auth = async (req, res, next) => {
@@ -22,7 +23,7 @@ const auth = async (req, res, next) => {
                 if (decoded) {
                     const { userID } = decoded
 
-                    const user = await userModel.findOne({ _id: userID })
+                    const user = await Users.findOne({ _id: userID })
 
                     const requiredrole = user.role;
 
