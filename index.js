@@ -3,10 +3,12 @@ const { dbConnection } = require("./config/user.config");
 const cors=require("cors");
 const { userRoutes } = require("./routes/users.route");
 const bookRoute = require("./routes/book.route");
+
+app.use(cors());
 const app=express();
 
 app.use(express.json());
-app.use(cors());
+
 
 
 app.get("/",(req,res)=>{
