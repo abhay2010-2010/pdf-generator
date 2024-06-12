@@ -1,31 +1,38 @@
+require("dotenv").config();
 const express = require("express");
-const { dbConnection } = require("./config/user.config");
 const cors = require("cors");
-const { userRoutes } = require("./routes/users.route");
-const bookRoute = require("./routes/book.route");
-
+const connectToDB = require("./src/configs/db");
+const UserRouter = require("./src/routes/user.routes");
+const BookRouter = require("./src/routes/book.routes");
 
 const app = express();
+const port =  3000;
 
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+  };
+  
+  app.use(cors(corsOptions));
 
+app.use("/users", UserRouter);
+app.use("/books", BookRouter);
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+  res.send("Hello World");
 });
 
-app.use('/pdf', userRoutes);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
-app.use('/books', bookRoute)
-
-app.listen(8080, async () => {
-    try {
-        await dbConnection;
-        console.log("Database is connected");
-        console.log("Server is running on port 8080");
-    } catch (error) {
-        console.log(error);
-    }
-
+app.listen(port, async () => {
+  try {
+    await connectToDB;
+    console.log("Connected to database successfully");
+    console.log(`Server is running at http://localhost:${port}`);
+  } catch (err) {
+    console.log("Error connecting to the database: ", err.message);
+  }
 });
